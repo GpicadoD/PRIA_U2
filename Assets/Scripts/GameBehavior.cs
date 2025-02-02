@@ -14,6 +14,10 @@ public class GameBehavior : MonoBehaviour
     public TMP_Text ProgressText;
 
     public Button WinButton;
+    public Button LossButton;
+
+    [SerializeField] private int _playerHP = 10;
+
 
     void Start()
     {
@@ -43,7 +47,6 @@ public class GameBehavior : MonoBehaviour
         }
     }
 
-    private int _playerHP = 10;
     public int HP
     {
 
@@ -52,8 +55,19 @@ public class GameBehavior : MonoBehaviour
         {
             _playerHP = value;
             HealthText.text = "Health: " + HP;
-            Debug.LogFormat("Lives: {0}", _playerHP);
+            if (_playerHP <= 0)
+            {
+                ProgressText.text = "You want another life with that?";
+                LossButton.gameObject.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                ProgressText.text = "Ouch... that's got hurt.";
+            }
+
         }
+
     }
 
     public void RestartScene()

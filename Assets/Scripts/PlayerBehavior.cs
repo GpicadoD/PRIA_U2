@@ -22,23 +22,26 @@ public class PlayerBehavior : MonoBehaviour
     public float BulletSpeed = 100f;
     private bool _isShooting;
 
+    private GameBehavior _gameManager;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
     }
 
     void Update()
     {
         _vInput = Input.GetAxis("Vertical") * MoveSpeed;
         _hInput = Input.GetAxis("Horizontal") * RotateSpeed;
-        _isJumping |= Input.GetKeyDown(KeyCode.J);
-        _isShooting |= Input.GetKeyDown(KeyCode.Space);
+        _isJumping |= Input.GetKeyDown(KeyCode.Space);
+        _isShooting |= Input.GetKeyDown(KeyCode.Mouse0);
 
-        /*
+        
         this.transform.Translate(Vector3.forward * _vInput * Time.deltaTime);
         this.transform.Rotate(Vector3.up * _hInput *Time.deltaTime);
-        */
+        
     }
 
     void FixedUpdate()
@@ -74,4 +77,13 @@ public class PlayerBehavior : MonoBehaviour
 
         return grounded;
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Enemy")
+        {
+            _gameManager.HP -= 1;
+        }
+    }
+
 }
